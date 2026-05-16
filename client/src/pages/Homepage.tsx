@@ -1,5 +1,5 @@
 import { useSendNameMutation } from '@/services/api/demoApi'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {Input} from "../components/ui/input"
 import {Card, CardDescription} from "../components/ui/card"
 import { Loader2 } from 'lucide-react'
