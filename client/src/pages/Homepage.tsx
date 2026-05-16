@@ -26,7 +26,7 @@ const Homepage = () => {
         </h1>
         <Card className='p-10 '>
           <div className='flex gap-3'>
-            <Input value={name} onChange={(e) => setName(e.target.value)} />
+            <Input placeholder='Enter name' value={name} onChange={(e) => setName(e.target.value)} />
             <Button variant={"outline"} onClick={handleSubmit}>
               Submit
             </Button>
