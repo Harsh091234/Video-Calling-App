@@ -1,10 +1,12 @@
 import { baseApi } from "@/services/api/baseApi"
 import { configureStore } from "@reduxjs/toolkit"
+import roomReducer from "../features/room/roomSlice"
 // ...
 
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
+    room: roomReducer  
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseApi.middleware),

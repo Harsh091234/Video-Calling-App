@@ -1,45 +1,54 @@
-import { useSendNameMutation } from '@/services/api/demoApi'
-import { useState } from 'react'
-import {Input} from "../components/ui/input"
-import {Card, CardDescription} from "../components/ui/card"
-import { Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { useAppDispatch } from "@/app/hooks"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { socket } from "@/socket/socket"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+
 const Homepage = () => {
-    const [sendName, {isLoading, data}] = useSendNameMutation();
-    const [name, setName] = useState<string>("");
-    const message = data?.message;
-    
-    const handleSubmit = async() => {
-        if(!name) return alert("enter your name");
-        try {
-            await sendName(name).unwrap();
+  const dispatch = useAppDispatch()
+  const [emailId, setEmailId] = useState("")
+  const [roomId, setRoomId] = useState("")
+  const navigate = useNavigate()
 
-        } catch (error: any) {
-          console.log("Error in handleSubmit", error.data.message)  
-        }
-    }
+  const handleSubmit = async () => {
+    socket.emit("join-room", { emailId, roomId })
+  }
 
-    return (
-      <div className="flex flex-col min-h-screen items-center justify-center">
-        <h1 className='text-2xl font-semibold mb-15'>
-          MERN-TS-VITE Starter with additonal Shadcn, RTK Query integration
-        </h1>
-        <Card className='p-10 '>
-          <div className='flex gap-3'>
-            <Input placeholder='Enter name' value={name} onChange={(e) => setName(e.target.value)} />
-            <Button variant={"outline"} onClick={handleSubmit}>
-              Submit
-            </Button>
-          </div>
+  socket.on("joined-room", ({ roomId }) => {
+    console.log("joined room received", roomId)
+  })
+  
+ useEffect(() => {
+   const handleJoinedRoom = ({ roomId }: { roomId: string }) => {
+     navigate(`/room/${roomId}`)
+   }
 
-          {isLoading ? (
-            <Loader2 />
-          ) : (
-            <CardDescription className='text-center'>{message}</CardDescription>
-          )}
-        </Card>
+   socket.on("joined-room", handleJoinedRoom)
+
+   return () => {
+     socket.off("joined-room", handleJoinedRoom)
+   }
+ }, [])
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center">
+      <div className="space-y-2">
+        <Input
+          type="text"
+          placeholder="Enter email"
+          value={emailId}
+          onChange={(e) => setEmailId(e.target.value)}
+        />
+        <Input
+          type="text"
+          placeholder="Enter room code"
+          value={roomId}
+          onChange={(e) => setRoomId(e.target.value)}
+        />
+        <Button onClick={handleSubmit}>Enter room</Button>
       </div>
-    )
+    </div>
+  )
 }
 
 export default Homepage

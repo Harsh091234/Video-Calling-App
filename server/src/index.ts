@@ -5,14 +5,15 @@ import dotnenv from "dotenv";
 import { connectDB } from "./config/db";
 
 import demoRoutes from "./modules/demo/demo.route";
+import { app, server } from "./socket/socket";
 dotnenv.config();
 
-const app = express();
+
 const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
   
   }),
 );
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 
 app.use("/api/demo", demoRoutes);
+
 // test route
 // app.get("/", (_req: Request, res: Response) => {
 //   res.status(200).json({
@@ -30,6 +32,6 @@ app.use("/api/demo", demoRoutes);
 //   });
 // });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
