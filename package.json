@@ -1,0 +1,22 @@
+{
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.8.0",
+    "tsx": "^4.22.0",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.6.2"
+  },
+  "scripts": {
+    "dev": "tsx server/src/index.ts",
+    "watch": "tsx watch server/src/index.ts",
+    "check": "tsc --noEmit",
+    "build": "tsc",
+    "start": "node server/dist/index.js"
+  }
+}
