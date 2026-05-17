@@ -15,14 +15,16 @@ const Homepage = () => {
     socket.emit("join-room", { emailId, roomId })
   }
 
-  socket.on("joined-room", ({ roomId }) => {
+ 
+
+   const handleJoinedRoom = ({ roomId }: { roomId: string }) => {
     console.log("joined room received", roomId)
-  })
+     navigate(`/room/${roomId}`)
+     
+   }
   
  useEffect(() => {
-   const handleJoinedRoom = ({ roomId }: { roomId: string }) => {
-     navigate(`/room/${roomId}`)
-   }
+  
 
    socket.on("joined-room", handleJoinedRoom)
 
