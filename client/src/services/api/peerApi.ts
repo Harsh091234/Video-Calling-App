@@ -22,6 +22,7 @@ export const peerApi = createApi({
                 }
             }
         }),
+
         createAnswer: builder.mutation({
             async queryFn(offer){
                 await peer.setRemoteDescription(offer);
@@ -40,8 +41,22 @@ export const peerApi = createApi({
                     data: "success"
                 }
             }
+        }),
+
+        sendStream: builder.mutation({
+            async queryFn(stream: MediaStream){
+            const tracks = stream.getTracks();
+            for(const track of tracks){
+                peer.addTrack(track, stream);
+            }  
+            return {
+                data: "success"
+            }
+                
+           
+            }
         })
     })
 })
 
-export const {useCreateOfferMutation, useCreateAnswerMutation, useSetRemoteAnswerMutation} = peerApi;
+export const {useCreateOfferMutation, useCreateAnswerMutation, useSetRemoteAnswerMutation, useSendStreamMutation} = peerApi;
