@@ -1,3 +1,6 @@
+import { socket } from "../socket/socket"
+
+
 export const peer = new RTCPeerConnection({
   iceServers: [
     {
@@ -5,3 +8,11 @@ export const peer = new RTCPeerConnection({
     },
   ],
 })
+
+peer.onicecandidate = (event) => {
+  if (event.candidate) {
+    socket.emit("ice-candidate", {
+      candidate: event.candidate,
+    })
+  }
+}
